@@ -1,1 +1,1 @@
-this is a simple app for anyonw who might see I like coding in django
+this is a simple app to keep track of your expenses
