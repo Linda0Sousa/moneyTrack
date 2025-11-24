@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FinTrack - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow p-4 flex justify-between">
+      <h1 class="text-xl font-bold">FinTrack</h1>
+      <div>
+        <span class="mr-4">Olá, {{ request.user.username }}!</span>
+        <a
+          href="{% url 'logout' %}"
+          class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+          >Sair</a
+        >
+      </div>
+    </nav>
+
+    <div class="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- financial resume -->
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h2 class="text-lg font-semibold mb-4">financial summary</h2>
+        <p class="text-gray-700">
+          Balance:
+          <span class="font-bold text-green-600">R$ {{ balance }}</span>
+        </p>
+        <p class="text-gray-700">
+          Total Income:
+          <span class="text-green-500">R$ {{ total_income }}</span>
+        </p>
+        <p class="text-gray-700">
+          Total Expenses:
+          <span class="text-red-500">R$ {{ total_expense }}</span>
+        </p>
+      </div>
+
+      <!-- Formulário de Nova Transação -->
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h2 class="text-lg font-semibold mb-4">Add Transaction</h2>
+        <form method="post" class="space-y-4">
+          {% csrf_token %} {{ transaction_form.as_p }}
+          <button
+            type="submit"
+            class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-semibold"
+          >
+            Add
+          </button>
+        </form>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow md:col-span-2">
+        <h2 class="text-lg font-semibold mb-4">Add Category</h2>
+        <form method="post" class="space-y-4">
+          {% csrf_token %} {{ category_form.as_p }}
+          <button
+            type="submit"
+            class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg font-semibold"
+          >
+            Add Category
+          </button>
+        </form>
+      </div>
+
+      <!-- Listagem de Transações -->
+      <div class="bg-white p-6 rounded-xl shadow md:col-span-2">
+        <h2 class="text-lg font-semibold mb-4">Transações</h2>
+        <table class="w-full table-auto border-collapse">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border px-4 py-2">Title</th>
+              <th class="border px-4 py-2">Category</th>
+              <th class="border px-4 py-2">Type</th>
+              <th class="border px-4 py-2">Value</th>
+              <th class="border px-4 py-2">Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for transaction in transactions %}
+            <tr>
+              <td class="border px-4 py-2">{{ transaction.title }}</td>
+              <td class="border px-4 py-2">
+                {% if transaction.category %} {{ transaction.category.name }}
+                {%else %} No category {% endif %}
+              </td>
+              <td class="border px-4 py-2">
+                {% if transaction.transaction_type == 'income' %}
+                <span class="text-green-500">Recipe</span>
+                {% else %}
+                <span class="text-red-500">Expense</span>
+                {% endif %}
+              </td>
+              <td class="border px-4 py-2">R$ {{ transaction.amount }}</td>
+              <td class="border px-4 py-2">{{ transaction.date }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="text-center p-4">
+                No registered transaction
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

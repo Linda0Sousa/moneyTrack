@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FinTrack - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+      <h1 class="text-2xl font-bold mb-6 text-center">FinTrack</h1>
+
+      {% if form.errors %}
+      <p class="text-red-500 mb-4">User or password incorrect.</p>
+      {% endif %}
+
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div>
+          <label class="block text-gray-700">User</label>
+          <input
+            type="text"
+            name="username"
+            class="w-full border rounded-lg px-3 py-2 mt-1"
+            placeholder="joe@doe.com"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700">Senha</label>
+          <input
+            type="password"
+            name="password"
+            class="w-full border rounded-lg px-3 py-2 mt-1"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-semibold"
+        >
+          Log In
+        </button>
+      </form>
+
+      <p class="mt-4 text-center text-gray-600">
+        Don't have an account?
+        <a href="{% url 'register' %}" class="text-blue-500 hover:underline"
+          >Sign up</a
+        >
+      </p>
+    </div>
+  </body>
+</html>
